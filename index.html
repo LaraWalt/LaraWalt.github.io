@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Umfrage-Verteiler</title>
+  <script>
+    const links = [
+      "https://survey.questionstar.com/dd57a1c7",
+      "https://survey.questionstar.com/7fb50e18",
+      "https://survey.questionstar.com/1b08f03e",
+      "https://survey.questionstar.com/ccf90e9b",
+      "https://survey.questionstar.com/da922b0a",
+      "https://survey.questionstar.com/4bd3dd14"
+    ];
+
+    // Lade die bisherigen Zählstände oder setze auf 0
+    let counts = JSON.parse(localStorage.getItem("distributionCounts")) || Array(links.length).fill(0);
+
+    // Finde den Index mit der niedrigsten Zahl
+    function getNextIndex() {
+      const min = Math.min(...counts);
+      const indices = counts.map((c, i) => (c === min ? i : -1)).filter(i => i !== -1);
+      return indices[Math.floor(Math.random() * indices.length)];
+    }
+
+    function redirectToSurvey() {
+      const idx = getNextIndex();
+      counts[idx]++;
+      localStorage.setItem("distributionCounts", JSON.stringify(counts));
+      window.location.href = links[idx];
+    }
+
+    // Automatische Weiterleitung
+    window.onload = redirectToSurvey;
+  </script>
+</head>
+<body>
+  <p>Du wirst gleich weitergeleitet ...</p>
+</body>
+</html>
